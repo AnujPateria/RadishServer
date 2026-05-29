@@ -30,6 +30,11 @@ class RedisServer { // use pascal case
     private: 
         int port;
         int server_socket;
+        /*
+            In linux everything is file descriptor: os assign some id to opened file
+            socket is like a file in linux
+            socket: create communication endpoint
+        */
         std::atomic<bool> running;
         
 };

@@ -20,7 +20,7 @@ void RedisServer::shutdown() {
 }
 
 void RedisServer::run() {
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    server_socket = socket(AF_INET, SOCK_STREAM, 0); //[ AF_INET -> ipv4 ], [SOCK_STREAM -> TCP connection why? because tcp guarante everthing ]  -> both return file descriptor
     if(server_socket < 0 ) {
         std:: cerr << "Error Creating Server Socket \n";
         return ;
@@ -34,12 +34,12 @@ void RedisServer::run() {
     serverAddr.sin_port = htons(port);
     serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
+    if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){ // attach socket to server without this os does not know which port server owns 
         std::cerr << "Error Binding Server Socket \n";
         return ;
     }
 
-    if(listen(server_socket, 10) < 0) {
+    if(listen(server_socket, 10) < 0) { // turn socket into waiting server now client connect
         std:: cerr << "Error Listening On Server Socket \n";
         return ;
     }
