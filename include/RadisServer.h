@@ -3,7 +3,7 @@
 /*
 Header guard : it do like if we define that file in different .cpp file then it will create same class aagin and again so redefinition of class error occurs
 
-// with guard : first include -> not define -> include file then #deine marks it as already included . second include-> alrady defiend -> skip entire file
+// with guard : first include -> not define -> include file then #define marks it as already included . second include-> alrady defiend -> skip entire file
 
 Alternative-/
 
@@ -13,7 +13,6 @@ Modern C++:
 
 Simpler and widely used.
 */
-
 
 #include <string> // why not c string? -> dangerous, buffer overflow, manual memory handling -> ex: char name[5] strcpy(name, "verylong text"); overflow -> crash/security issue
 //ie why it safer
