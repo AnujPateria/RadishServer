@@ -53,7 +53,7 @@ std::vector<std::string> RedisDatabase::keys() {
     return result;
 }
 
-std::string RedisDatabase::type(const std::string& key) {
+std::string RedisDatabase::type(const std::string& key) {  
     std::lock_guard<std::mutex> lock(db_mutex);
     purgeExpired();
     if (kv_store.find(key) != kv_store.end()) 
@@ -89,7 +89,7 @@ bool RedisDatabase::expire(const std::string& key, int seconds) {
 }
 
 void RedisDatabase::purgeExpired() {
-    auto now = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now(); // store current time 
     for (auto it = expiry_map.begin(); it != expiry_map.end(); ) {
         if (now > it->second) {
             // Remove from all stores
@@ -140,7 +140,7 @@ bool RedisDatabase::rename(const std::string& oldKey, const std::string& newKey)
 
 // List Opreations
 std::vector<std::string> RedisDatabase::lget(const std::string& key) {
-    std::lock_guard<std::mutex> lock(db_mutex);
+    std::lock_guard<std::mutex> lock(db_mutex); // now other process/thread not access the protected code
     auto it = list_store.find(key);
     if (it != list_store.end()) {
         return it->second; 

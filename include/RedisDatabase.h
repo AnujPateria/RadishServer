@@ -9,7 +9,7 @@
 
 class RedisDatabase {
 public: 
-    // Get the singleton instance
+    // Get the singleton instance -> single source of truth (only one database store everything)
     static RedisDatabase& getInstance();
 
     // Common Comands
@@ -62,7 +62,24 @@ private:
     std::unordered_map<std::string, std::vector<std::string>> list_store;
     std::unordered_map<std::string, std::unordered_map<std::string, std::string>> hash_store;
 
-    std::unordered_map<std::string, std::chrono::steady_clock::time_point> expiry_map;
+    std::unordered_map<std::string, std::chrono::steady_clock::time_point> expiry_map; //Without expiry_map, your Redis server would not know when to delete keys.
 };
 
 #endif
+
+/*
+                   RedisDatabase
+                       |
+       --------------------------------
+        |              |               |
+     kv_store      list_store      hash_store
+        |              |               |
+     name->anuj   tasks->[A,B]   user:1->{...}
+        |              |               |
+        --------------------------------
+                       |
+                  expiry_map
+                       |
+                name -> expire time
+             
+*/

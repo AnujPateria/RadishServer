@@ -9,13 +9,13 @@
 
 // RESP parser:
 // *2\r\n$4\r\n\PING\r\n$4\r\nTEST\r\n
-// *2 -> array has 2 elements
+// *2 -> array has 2 elements   
 // $4 -> next string has 4 characters
 // PING
 // TEST
 
 std::vector<std::string> parseRespCommand(const std::string &input) {
-    std::vector<std::string> tokens;
+    std::vector<std::string> tokens; // store all the parsed command argument
     if (input.empty()) return tokens;
 
     // If it doesnt strart with '*', fallback to splitting by whitespace.
@@ -34,7 +34,7 @@ std::vector<std::string> parseRespCommand(const std::string &input) {
 
     // crlf = Carriage Return (\r), Line Feed (\n)
     size_t crlf = input.find("\r\n", pos);
-    if (crlf == std::string::npos) return tokens;
+    if (crlf == std::string::npos) return tokens; // npos means not found
 
     int numElements = std::stoi(input.substr(pos, crlf - pos));
     pos = crlf + 2;
@@ -56,7 +56,7 @@ std::vector<std::string> parseRespCommand(const std::string &input) {
     return tokens;
 }
 
-//----------------------
+//----------------------–
 // Common Commands
 //----------------------
 static std::string handlePing(const std::vector<std::string>& /*tokens*/, RedisDatabase& /*db*/) {
@@ -81,7 +81,7 @@ static std::string handleSet(const std::vector<std::string>& tokens, RedisDataba
     if (tokens.size() < 3)
         return "-Error: SET requires key and value\r\n";
     db.set(tokens[1], tokens[2]);
-    return "+OK\r\n";
+    return "+OK\r\n"; // return simple stirng resp(redis protocol(resp))
 }
 
 static std::string handleGet(const std::vector<std::string>& tokens, RedisDatabase& db) {
@@ -111,7 +111,7 @@ static std::string handleType(const std::vector<std::string>& tokens, RedisDatab
 static std::string handleDel(const std::vector<std::string>& tokens, RedisDatabase& db) {
     if (tokens.size() < 2)
         return "-Error: DEL requires key\r\n";
-    bool res = db.del(tokens[1]);
+    bool res = db.del(tokens[1]);// token[0] is type and token[1] is key
     return ":" + std::to_string(res ? 1 : 0) + "\r\n";
 }
 
@@ -202,7 +202,7 @@ static std::string handleLrem(const std::vector<std::string>& tokens, RedisDatab
         return "-Error: LREM requires key, count and value\r\n";
     try {
         int count = std::stoi(tokens[2]);
-        int removed = db.lrem(tokens[1], count, tokens[3]);
+        int removed = db.lrem(tokens[1], count, tokens[3]); 
         return ":" +std::to_string(removed) + "\r\n";
     } catch (const std::exception&) {
         return "-Error: Invalid count\r\n";

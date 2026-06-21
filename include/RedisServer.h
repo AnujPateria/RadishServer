@@ -31,11 +31,18 @@ private:
             In linux everything is file descriptor: os assign some id to opened file
             socket is like a file in linux
             socket: create communication endpoint
-        */
-    std::atomic<bool> running;
+    */
+    std::atomic<bool> running; // it is synchronized when multiple thread change it 
 
     // Setup signal handling for graceful shutdown (ctrl + c) 
-    void setupSignalHandler();
+    void setupSignalHandler(); // internal function use by run()
+    /*
+        Without a signal handler:
+
+        Program terminates immediately.
+        Open sockets may not be closed properly.
+        Resources may not be cleaned up. 
+    */
 };
 
 #endif
